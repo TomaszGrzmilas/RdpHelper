@@ -3,6 +3,7 @@
 // https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/rdp-files
 
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -104,12 +105,10 @@ namespace RdpHelper
         [RdpConfName("username:s:")]
         private string Username { get; set; } = "";
         [RdpConfName("password 51:b:")]
-        private string Password { get; set; } = "";
+        private string Password { get; set; }
 
         public RdpConfig(string address, string username, string password)
         {
-            string pwstr = "";
-
             if (string.IsNullOrEmpty(address))
             {
                 throw new ArgumentNullException(nameof(address));
@@ -118,29 +117,35 @@ namespace RdpHelper
             FullAddress = address;
             Username = username;
 
-            if (password != null)
+            if ((password ?? "") != "")
             {
-                pwstr = BitConverter.ToString(DataProtection.ProtectData(Encoding.Unicode.GetBytes(password), "")).Replace("-", "");
+                Password = BitConverter.ToString(DataProtection.ProtectData(Encoding.Unicode.GetBytes(password), "")).Replace("-", "");
             }
-
-            Password = pwstr;
         }
 
         public override string ToString()
         {
             StringBuilder str = new StringBuilder();
 
-            foreach (var prop in typeof(RdpConfig).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            foreach (var prop in typeof(RdpConfig).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).Where(x => x.Name != nameof(this.Password)))
             {
                 foreach (RdpConfNameAttribute attr in prop.GetCustomAttributes(typeof(RdpConfNameAttribute), false))
                 {
                     str.AppendLine(attr.Name + prop.GetValue(this));
                 }
             }
-            return str.ToString();
-        }
 
-            
+            if ((this.Password ?? "") != "")
+            {
+                RdpConfNameAttribute attr = typeof(RdpConfig)
+                    .GetProperty(nameof(this.Password), BindingFlags.NonPublic | BindingFlags.Instance)
+                    .GetCustomAttributes(typeof(RdpConfNameAttribute), false)
+                    .First() as RdpConfNameAttribute; 
+                str.AppendLine(attr.Name + this.Password);
+            }
+
+            return str.ToString();
+        }    
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
