@@ -1,12 +1,13 @@
-﻿using System;
+﻿// Documentation:
+// https://www.donkz.nl/overview-rdp-file-settings/
+// https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/rdp-files
+
+using System;
 using System.Reflection;
 using System.Text;
 
 namespace RdpHelper
 {
-    // https://www.donkz.nl/overview-rdp-file-settings/
-    // https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/rdp-files
-
     public sealed class RdpConfig
     {
         [RdpConfName("screen mode id:i:")]

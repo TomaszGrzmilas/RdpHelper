@@ -1,9 +1,10 @@
-﻿using System;
+﻿// Author: NeilHu1994
+// original code from https://github.com/NeilHu1994/RemoteDesktopConnection
+
+using System;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Security;
-
-// original code from https://github.com/NeilHu1994/RemoteDesktopConnection
 
 [Serializable()]
 internal sealed class DataProtection
