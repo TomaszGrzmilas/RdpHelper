@@ -2,6 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Tomasz Grzmilas</Authors>
+    <Company />
+    <Description>Package for generating RDP strings than can be save to file.</Description>
+    <PackageProjectUrl>https://github.com/TomaszGrzmilas/RdpHelper</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>
